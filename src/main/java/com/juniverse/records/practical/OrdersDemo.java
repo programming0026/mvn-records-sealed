@@ -3,11 +3,15 @@ package com.juniverse.records.practical;
 import java.math.BigDecimal;
 import java.util.List;
 
+import java.util.logging.Logger;
+import com.juniverse.records.AppLogger;
 /**
  * Caso práctico: el estado de un pedido modelado como interfaz sellada de records. Los estados imposibles
  * (un pedido "enviado" sin número de guía) no se pueden representar, y cada transición se valida en tiempo de compilación.
  */
 public final class OrdersDemo {
+    private static final Logger LOGGER = AppLogger.get(OrdersDemo.class);
+
 
     private OrdersDemo() {
     }
@@ -110,12 +114,12 @@ public final class OrdersDemo {
         Draft draft = new Draft(List.of(new Line("Teclado", 1, new BigDecimal("899.00")), new Line("Ratón", 2, new BigDecimal("349.50"))));
         Paid paid = pay(draft);
         for (Order o : new Order[]{draft, paid, new Shipped(paid, "MX-123456"), new Cancelled("sin stock")}) {
-            System.out.println("  " + status(o));
+            LOGGER.info("  " + status(o));
         }
         try {
             new Line("Cable", 0, BigDecimal.ONE);
         } catch (IllegalArgumentException e) {
-            System.out.println("Línea inválida rechazada: " + e.getMessage());
+            LOGGER.info("Línea inválida rechazada: " + e.getMessage());
         }
     }
 }

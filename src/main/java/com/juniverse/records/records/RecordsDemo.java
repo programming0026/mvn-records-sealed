@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import java.util.logging.Logger;
+import com.juniverse.records.AppLogger;
 /**
  * Records (Java 16): clases inmutables para modelar datos, sin código repetitivo.
  *
@@ -13,6 +15,8 @@ import java.util.Objects;
  * {@code getName()}), {@code equals}, {@code hashCode} y {@code toString}. Los campos son {@code final}: el objeto es inmutable.</p>
  */
 public final class RecordsDemo {
+    private static final Logger LOGGER = AppLogger.get(RecordsDemo.class);
+
 
     private RecordsDemo() {
     }
@@ -107,25 +111,25 @@ public final class RecordsDemo {
     public static void run() {
         Point a = new Point(2, 3);
         Point b = new Point(2, 3);
-        System.out.println("toString: " + a + " | equals por valor: " + a.equals(b) + " | mismo hashCode: " + (a.hashCode() == b.hashCode()));
-        System.out.println("Inmutable: moved(a, 5) = " + moved(a, 5) + ", y a sigue siendo " + a);
+        LOGGER.info("toString: " + a + " | equals por valor: " + a.equals(b) + " | mismo hashCode: " + (a.hashCode() == b.hashCode()));
+        LOGGER.info("Inmutable: moved(a, 5) = " + moved(a, 5) + ", y a sigue siendo " + a);
 
         Person p = new Person("  Ana López ", "ANA@Mail.COM");
-        System.out.println("Constructor compacto normaliza: " + p.name() + " / " + p.email() + " / edad ~" + p.age());
-        System.out.println("Método de fábrica: " + Person.parse("Luis;LUIS@mail.com"));
+        LOGGER.info("Constructor compacto normaliza: " + p.name() + " / " + p.email() + " / edad ~" + p.age());
+        LOGGER.info("Método de fábrica: " + Person.parse("Luis;LUIS@mail.com"));
         try {
             new Person("   ", "x@y.z");
         } catch (IllegalArgumentException e) {
-            System.out.println("Validación: " + e.getMessage());
+            LOGGER.info("Validación: " + e.getMessage());
         }
 
         List<String> original = new ArrayList<>(List.of("java", "21"));
         Tagged<String> t = new Tagged<>("Curso", original);
         original.add("hackeado");
-        System.out.println("Copia defensiva -> tags: " + t.tags() + " (la lista original cambió pero el record no)");
+        LOGGER.info("Copia defensiva -> tags: " + t.tags() + " (la lista original cambió pero el record no)");
 
         // Los records como claves de mapa funcionan gracias a equals/hashCode generados
-        Map<Point, String> mapa = Map.of(new Point(0, 0), "origen", new Point(1, 1), "diagonal");
-        System.out.println("Record como clave de Map: " + mapa.get(new Point(1, 1)));
+        Map<Point, String> map = Map.of(new Point(0, 0), "origen", new Point(1, 1), "diagonal");
+        LOGGER.info("Record como clave de Map: " + map.get(new Point(1, 1)));
     }
 }

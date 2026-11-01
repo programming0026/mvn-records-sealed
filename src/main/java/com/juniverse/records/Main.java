@@ -5,16 +5,19 @@ import com.juniverse.records.practical.OrdersDemo;
 import com.juniverse.records.records.RecordsDemo;
 import com.juniverse.records.sealed.SealedDemo;
 
+import java.util.logging.Logger;
 /**
  * Records y clases selladas de Java 21: modelado de datos inmutables y jerarquías cerradas con pattern matching.
  */
 public final class Main {
+    private static final Logger LOGGER = AppLogger.get(Main.class);
+
 
     private Main() {
     }
 
     private static void title(String text) {
-        System.out.println("\n=========== " + text + " ===========");
+        LOGGER.info("\n=========== " + text + " ===========");
     }
 
     /**

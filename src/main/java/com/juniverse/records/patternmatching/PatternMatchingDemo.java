@@ -2,6 +2,8 @@ package com.juniverse.records.patternmatching;
 
 import java.util.List;
 
+import java.util.logging.Logger;
+import com.juniverse.records.AppLogger;
 /**
  * Modelado de datos con records + interfaces selladas + pattern matching (Java 21): el estilo de "tipos algebraicos".
  *
@@ -9,6 +11,8 @@ import java.util.List;
  * Las operaciones se escriben como {@code switch} con patrones de record (deconstrucción), exhaustivos y sin casts.</p>
  */
 public final class PatternMatchingDemo {
+    private static final Logger LOGGER = AppLogger.get(PatternMatchingDemo.class);
+
 
     private PatternMatchingDemo() {
     }
@@ -126,23 +130,23 @@ public final class PatternMatchingDemo {
     /** Ejecuta la demostración. */
     public static void run() {
         Expr e = new Add(new Mul(new Num(3), new Num(1)), new Add(new Num(4), new Num(0)));
-        System.out.println("Expresión:  " + show(e));
-        System.out.println("Evaluación: " + eval(e));
+        LOGGER.info("Expresión:  " + show(e));
+        LOGGER.info("Evaluación: " + eval(e));
         Expr simple = simplify(e);
-        System.out.println("Simplificada: " + show(simple) + "  (" + simple + ")");
-        System.out.println("Doble negación: " + show(simplify(new Neg(new Neg(new Num(7))))));
+        LOGGER.info("Simplificada: " + show(simple) + "  (" + simple + ")");
+        LOGGER.info("Doble negación: " + show(simplify(new Neg(new Neg(new Num(7))))));
 
         for (Object o : new Object[]{null, -4, 10, "  ", "hola", List.of(), List.of(1, 2), new Neg(new Num(5)), 3.14}) {
-            System.out.println("  describe -> " + describe(o));
+            LOGGER.info("  describe -> " + describe(o));
         }
 
         // instanceof con patrón (Java 16): comprueba el tipo y declara la variable en un solo paso
-        Object dato = "Java 21";
-        if (dato instanceof String s && s.length() > 5) {
-            System.out.println("instanceof con patrón: '" + s + "' tiene más de 5 caracteres");
+        Object datum = "Java 21";
+        if (datum instanceof String s && s.length() > 5) {
+            LOGGER.info("instanceof con patrón: '" + s + "' tiene más de 5 caracteres");
         }
-        if (e instanceof Add(Expr izq, Expr der)) {
-            System.out.println("instanceof con patrón de record: raíz Add, izquierda = " + show(izq));
+        if (e instanceof Add(Expr left, Expr der)) {
+            LOGGER.info("instanceof con patrón de record: raíz Add, izquierda = " + show(left));
         }
     }
 }

@@ -1,5 +1,8 @@
 package com.juniverse.records.sealed;
 
+
+import java.util.logging.Logger;
+import com.juniverse.records.AppLogger;
 /**
  * Clases e interfaces selladas (Java 17): una jerarquía <b>cerrada</b>. La cláusula {@code permits} indica exactamente
  * qué clases pueden extenderla, así el compilador conoce todos los casos posibles.
@@ -7,6 +10,8 @@ package com.juniverse.records.sealed;
  * <p>Cada subclase debe ser {@code final}, {@code sealed} (con sus propios permitidos) o {@code non-sealed} (abierta de nuevo).</p>
  */
 public final class SealedDemo {
+    private static final Logger LOGGER = AppLogger.get(SealedDemo.class);
+
 
     private SealedDemo() {
     }
@@ -126,12 +131,12 @@ public final class SealedDemo {
 
     /** Ejecuta la demostración. */
     public static void run() {
-        Vehicle[] flota = {new Car("ABC-123", 4), new Car("VAN-777", 5), new Truck("TRK-001", 12.5),
+        Vehicle[] fleet = {new Car("ABC-123", 4), new Car("VAN-777", 5), new Truck("TRK-001", 12.5),
             new Motorcycle("MOT-9"), new ElectricMotorcycle("ELE-1")};
-        for (Vehicle v : flota) {
-            System.out.printf("  %-8s (%s) -> peaje $%.2f%n", v.plate(), v.getClass().getSimpleName(), toll(v));
+        for (Vehicle v : fleet) {
+            LOGGER.info(String.format("  %-8s (%s) -> peaje $%.2f", v.plate(), v.getClass().getSimpleName(), toll(v)));
         }
-        System.out.println("Clase sellada: " + Vehicle.class.isSealed() + ", permitidas: "
+        LOGGER.info("Clase sellada: " + Vehicle.class.isSealed() + ", permitidas: "
                 + java.util.Arrays.stream(Vehicle.class.getPermittedSubclasses()).map(Class::getSimpleName).toList());
     }
 }
